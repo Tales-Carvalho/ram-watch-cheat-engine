@@ -87,6 +87,151 @@ function layouts.normal:init()
   
 end
 
+layouts.youtube = subclass(Layout)
+function layouts.youtube:init()
+  
+  local game = self.game
+
+  -- Coordinates where the input viewer starts
+  local x_coord_inputs = 30
+  local y_coord_inputs = 389
+  
+  -- Offset coordinates for each button, relative to above variables
+  local x_coord = {141, 124, 158, 141, 107, 158,  14, 141, 142, 132, 152, 142}
+  local y_coord = { 47,  47,  47,  27,  67,   0,   0,   0,  97,  85,  85,  72}
+  
+  local buttons = {"A", "B", "X", "Y", "S", "Z", "L", "R", "↓", "←", "→", "↑"} 
+  local f_sizes = { 11,  11,  11,  11,  11,  11,  11,  11,   8,   8,   8,   8}
+  
+  self.margin = 6
+  self:setBreakpointUpdateMethod()
+  --self:activateAutoPositioningY()
+  
+  self.window:setSize(240, 540)
+  self.labelDefaults = {fontSize=11, fontName=fixedWidthFontName}
+  self.itemDisplayDefaults = {narrow=true}
+  
+  self:addLabel()
+  
+  --Time
+  self:addItem(function(...) return self.game:displayTime(...) end)
+  
+  --Speed
+  self:addItem(function(...) return self.game:displaySpeedSmall(...) end)
+  
+  --Position
+  self:addItem(function(...) return self.game:displayPositionSmall(...) end)
+  
+  --Rotation
+  self:addItem(function(...) return self.game:displayRotationSmall(...) end)
+  
+  --Physics
+  --self:addItem(function(...) return self.game:displayPhysics(...) end)
+  
+  --Misc
+  self:addItem(function(...) return self.game:displayMiscSmall(...) end)
+  
+  --Status Bitfield
+  --self:addItem(function(...) return self.game:displayStatus(...) end)
+  
+  --Inputs
+  for i, button in pairs(buttons) do
+	  self:addLabel{x=x_coord[i]+x_coord_inputs, y=y_coord[i]+y_coord_inputs, fontColor=notPressed, fontSize=f_sizes[i]}
+	  self:addItem(button)
+  end
+  
+  self:addLabel{x=x_coord_inputs+141, y=y_coord_inputs+82, fontColor=notPressed}
+  self:addItem("D")
+  
+  for i, button in pairs(buttons) do
+	  self:addLabel{x=x_coord[i]+x_coord_inputs, y=y_coord[i]+y_coord_inputs, fontColor=inputColor, fontSize=f_sizes[i]}
+	  self:addItem(function(...) return self.game:buttonDisplay(button) end)
+  end
+  
+  self:addLabel{foregroundColor=inputColor}  
+  self:addImage(
+    self.game.ControllerLRImage, {game}, {x=x_coord_inputs+31, y=y_coord_inputs+1, foregroundColor=inputColor, outlineColor=notPressed})
+	
+  self:addLabel{foregroundColor=inputColor}
+  self:addImage(
+    self.game.ControllerStickImage, {game}, {x=x_coord_inputs, y=y_coord_inputs+21, foregroundColor=inputColor, outlineColor=notPressed})
+
+  self:addLabel{x=x_coord_inputs+14, y=y_coord_inputs+123, fontColor=inputColor}
+  self:addItem(function(...) return self.game:displayAnalogPosition(...) end)
+  
+end
+
+layouts.angleTest = subclass(Layout)
+function layouts.angleTest:init()
+  
+  local game = self.game
+
+  -- Coordinates where the input viewer starts
+  local x_coord_inputs = 71
+  local y_coord_inputs = 569
+  
+  -- Offset coordinates for each button, relative to above variables
+  local x_coord = {141, 124, 158, 141, 107, 158,  14, 141, 142, 132, 152, 142}
+  local y_coord = { 47,  47,  47,  27,  67,   0,   0,   0,  97,  85,  85,  72}
+  
+  local buttons = {"A", "B", "X", "Y", "S", "Z", "L", "R", "↓", "←", "→", "↑"} 
+  local f_sizes = { 11,  11,  11,  11,  11,  11,  11,  11,   8,   8,   8,   8}
+  
+  self.margin = 6
+  self:setBreakpointUpdateMethod()
+  --self:activateAutoPositioningY()
+  
+  self.window:setSize(320, 720)
+  self.labelDefaults = {fontSize=11, fontName=fixedWidthFontName}
+  self.itemDisplayDefaults = {narrow=true}
+  
+  self:addLabel()
+  
+  --Time
+  self:addItem(function(...) return self.game:displayTime(...) end)
+  
+  --Position
+  self:addItem(function(...) return self.game:displayPosition(...) end)
+  
+  --Rotation
+  self:addItem(function(...) return self.game:displayRotation(...) end)
+  
+  --Camera Position
+  self:addItem(function(...) return self.game:displayCameraPosition(...) end)
+  
+  --Camera Rotation
+  self:addItem(function(...) return self.game:displayCameraRotation(...) end)
+  
+  --Angle Optimization
+  self:addItem(function(...) return self.game:displayAngleOptimization(...) end)
+  
+  --Inputs
+  for i, button in pairs(buttons) do
+	  self:addLabel{x=x_coord[i]+x_coord_inputs, y=y_coord[i]+y_coord_inputs, fontColor=notPressed, fontSize=f_sizes[i]}
+	  self:addItem(button)
+  end
+  
+  self:addLabel{x=x_coord_inputs+141, y=y_coord_inputs+82, fontColor=notPressed}
+  self:addItem("D")
+  
+  for i, button in pairs(buttons) do
+	  self:addLabel{x=x_coord[i]+x_coord_inputs, y=y_coord[i]+y_coord_inputs, fontColor=inputColor, fontSize=f_sizes[i]}
+	  self:addItem(function(...) return self.game:buttonDisplay(button) end)
+  end
+  
+  self:addLabel{foregroundColor=inputColor}  
+  self:addImage(
+    self.game.ControllerLRImage, {game}, {x=x_coord_inputs+31, y=y_coord_inputs+1, foregroundColor=inputColor, outlineColor=notPressed})
+	
+  self:addLabel{foregroundColor=inputColor}
+  self:addImage(
+    self.game.ControllerStickImage, {game}, {x=x_coord_inputs, y=y_coord_inputs+21, foregroundColor=inputColor, outlineColor=notPressed})
+
+  self:addLabel{x=x_coord_inputs+14, y=y_coord_inputs+123, fontColor=inputColor}
+  self:addItem(function(...) return self.game:displayAnalogPosition(...) end)
+  
+end
+
 layouts.recording = subclass(Layout)
 function layouts.recording:init()
 

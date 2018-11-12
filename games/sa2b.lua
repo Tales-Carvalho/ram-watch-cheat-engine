@@ -7,6 +7,8 @@ local dolphin = require 'dolphin'
 
 local MyGame = subclass(dolphin.DolphinGame)
 
+local angles = require "games.sa2b_angles"
+
 MyGame.supportedGameVersions = {
   na = 'GSNE8P',
 }
@@ -182,6 +184,16 @@ GV.speedShoes =
   MV("SpeedShoes", 0xD9E302, StaticValue, ShortType)
   
   
+-- Camera
+  
+GV.camXPos = MV("Camera XPos", 0x1FF5B8, StaticValue, FloatType)
+GV.camYPos = MV("Camera YPos", 0x1FF5BC, StaticValue, FloatType)
+GV.camZPos = MV("Camera ZPos", 0x1FF5C0, StaticValue, FloatType)
+  
+GV.camXRot = MV("Camera XRot", 0x1FF5C6, StaticValue, ShortType)
+GV.camYRot = MV("Camera YRot", 0x1FF5CA, StaticValue, ShortType)
+GV.camZRot = MV("Camera ZRot", 0x1FF5CE, StaticValue, ShortType)
+  
 -- Inputs
 
 GV.ABXYS = MV("ABXY & Start", 0x2BAB78,
@@ -218,6 +230,10 @@ GV.minutes =
 -- Screen display functions
   
 function MyGame:displaySpeed()
+  if utils.readIntBE(self.startAddress + 0x1e7788) == 0 then
+	return string.format("")
+  end
+  
   local stspd = self.stSpeed:get()
   local sdspd = self.sdSpeed:get()
   local fspd = self.fSpeed:get()
@@ -229,7 +245,27 @@ function MyGame:displaySpeed()
   return string.format("Speed\n  Fwd: %9.4f\tX: %9.4f\n  Vtc: %9.4f\tY: %9.4f\n  Std: %9.4f\tZ: %9.4f\n  Sdw: %9.4f\n", fspd, xspd, vspd, yspd, stspd, zspd, sdspd)
 end
 
+function MyGame:displaySpeedSmall()
+  if utils.readIntBE(self.startAddress + 0x1e7788) == 0 then
+	return string.format("")
+  end
+  
+  local stspd = self.stSpeed:get()
+  local sdspd = self.sdSpeed:get()
+  local fspd = self.fSpeed:get()
+  local vspd = self.vSpeed:get()
+  local xspd = self.xSpd:get()
+  local yspd = self.ySpd:get()
+  local zspd = self.zSpd:get()
+  
+  return string.format("Speed\n  Fw:%8.3f   X: %8.3f\n  Vt:%8.3f   Y: %8.3f\n  St:%8.3f   Z: %8.3f\n  Sd:%8.3f\n", fspd, xspd, vspd, yspd, stspd, zspd, sdspd)
+end
+
 function MyGame:displayRotation()
+  if utils.readIntBE(self.startAddress + 0x1e7788) == 0 then
+	return string.format("")
+  end
+  
   local xrot = self.xRot:get()
   local yrot = self.yRot:get()
   local zrot = self.zRot:get()
@@ -247,7 +283,33 @@ function MyGame:displayRotation()
   return string.format("Rotation\n     Current          Final\n  X: %05d  %6.2f°   %05d  %6.2f°\n  Y: %05d  %6.2f°   %05d  %6.2f°\n  Z: %05d  %6.2f°   %05d  %6.2f°\n", xrot, xrotdeg, xfrot, xfrotdeg, yrot, yrotdeg, yfrot, yfrotdeg, zrot, zrotdeg, zfrot, zfrotdeg)
 end
 
+function MyGame:displayRotationSmall()
+  if utils.readIntBE(self.startAddress + 0x1e7788) == 0 then
+	return string.format("")
+  end
+  
+  local xrot = self.xRot:get()
+  local yrot = self.yRot:get()
+  local zrot = self.zRot:get()
+  local xrotdeg = xrot * 360 / 65536
+  local yrotdeg = yrot * 360 / 65536
+  local zrotdeg = zrot * 360 / 65536
+  
+  local xfrot = self.xfRot:get()
+  local yfrot = self.yfRot:get()
+  local zfrot = self.zfRot:get()
+  local xfrotdeg = xfrot * 360 / 65536
+  local yfrotdeg = yfrot * 360 / 65536
+  local zfrotdeg = zfrot * 360 / 65536
+  
+  return string.format("Rotation\n      Current    Final\n  X:  %6.2f°    %6.2f°\n  Y:  %6.2f°    %6.2f°\n  Z:  %6.2f°    %6.2f°\n", xrotdeg, xfrotdeg, yrotdeg, yfrotdeg, zrotdeg, zfrotdeg)
+end
+
 function MyGame:displayPosition()
+  if utils.readIntBE(self.startAddress + 0x1e7788) == 0 then
+	return string.format("")
+  end
+
   local xpos = self.xPos:get()
   local ypos = self.yPos:get()
   local zpos = self.zPos:get()
@@ -259,7 +321,27 @@ function MyGame:displayPosition()
   return string.format("Position              External Push\n  X: %10.4f         X: %9.4f\n  Y: %10.4f         Y: %9.4f\n  Z: %10.4f         Z: %9.4f\n", xpos, xpush, ypos, ypush, zpos, zpush)
 end
 
+function MyGame:displayPositionSmall()
+  if utils.readIntBE(self.startAddress + 0x1e7788) == 0 then
+	return string.format("")
+  end
+
+  local xpos = self.xPos:get()
+  local ypos = self.yPos:get()
+  local zpos = self.zPos:get()
+  
+  local xpush = self.xPush:get()
+  local ypush = self.yPush:get()
+  local zpush = self.zPush:get()
+  
+  return string.format("Position       External Push\n  X: %8.2f   X: %8.2f\n  Y: %8.2f   Y: %8.2f\n  Z: %8.2f   Z: %8.2f\n", xpos, xpush, ypos, ypush, zpos, zpush)
+end
+
 function MyGame:displayTime()
+  if utils.readIntBE(self.startAddress + 0x1e7788) == 0 then
+	return string.format(" Waiting for stage selection ")
+  end
+  
   local frames = self.frameCounter:get()
   local centi = self.centiseconds:get()
   local sec = self.seconds:get()
@@ -268,18 +350,34 @@ function MyGame:displayTime()
   local chr = self.character:get()
   local chr_array = {"Sonic", "Shadow", "Mechless Tails", "Mechless Eggman", "Knuckles", "Rouge", "Tails", "Eggman", "Amy", "Super Sonic", "Super Shadow", "", "Metal Sonic", "Chao Walker", "Dark Chao Walker", "Tikal", "Chaos"}
   
-  return string.format("  %02d:%02d:%02d | %5d | %s\n", minu, sec, centi, frames, chr_array[chr+1])
+  return string.format(" %02d:%02d:%02d | %5d | %s\n", minu, sec, centi, frames, chr_array[chr+1])
 end  
 
 function MyGame:displayMisc()
+  if utils.readIntBE(self.startAddress + 0x1e7788) == 0 then
+	return string.format("")
+  end
+  
   local hvr = self.hover:get()
-  local spdsh = self.speedShoes:get()
   local actn = self.action:get()
-  -- TODO: fix speed shoes
   return string.format("Misc\n  Hover:  %3d         Action: %3d\n", hvr, actn)
 end
 
+function MyGame:displayMiscSmall()
+  if utils.readIntBE(self.startAddress + 0x1e7788) == 0 then
+	return string.format("")
+  end
+  
+  local hvr = self.hover:get()
+  local actn = self.action:get()
+  return string.format("Misc\n  Hover: %3d   Action: %3d\n", hvr, actn)
+end
+
 function MyGame:displayStatus()
+  if utils.readIntBE(self.startAddress + 0x1e7788) == 0 then
+	return string.format("")
+  end
+  
   local stts1 = self.status1:get()
   local stts2 = self.status2:get()
   local status_arr = {"Ball Form", "Light Dash", "B Enabled", "Holding Object", "Setting Variables", "Automated Section", "Disable Control", "Invincible", "On Ground", "On Ground (Object)", "Hurt", "Object Interact", "Object Ceiling", "On Object", "Unknown", "Unknown"}
@@ -309,6 +407,10 @@ function MyGame:displayStatus()
 end
 
 function MyGame:displayPhysics()
+  if utils.readIntBE(self.startAddress + 0x1e7788) == 0 then
+	return string.format("")
+  end
+  
   local vspd = self.vSpeed:get()
   local xrot = self.xRot:get()
   local zrot = self.zRot:get()
@@ -332,6 +434,40 @@ function MyGame:displayPhysics()
   end
   
   return string.format("Physics\n  GravityAngle = %3.2f°\n  GlobalTermVel = %3.4f\n  AngledTermVel = %3.4f\n  ReqFspdGravity = %3.4f\n  ReqFspdTermVel = %3.4f\n", math.deg(gravangle), tv, angledtv, reqfspd_curr, reqfspd_attv)
+end
+
+function MyGame:displayCameraPosition()
+  local xpos = self.camXPos:get()
+  local ypos = self.camYPos:get()
+  local zpos = self.camZPos:get()
+  
+  return string.format("Camera Position\n  X: %10.4f\n  Y: %10.4f\n  Z: %10.4f\n", xpos, ypos, zpos)
+end
+
+function MyGame:displayCameraRotation()
+  local xrot = self.camXRot:get()
+  local yrot = self.camYRot:get()
+  local zrot = self.camZRot:get()
+  local xrotdeg = xrot * 360 / 65536
+  local yrotdeg = yrot * 360 / 65536
+  local zrotdeg = zrot * 360 / 65536
+  
+  return string.format("Camera Rotation\n     Current\n  X: %05d  %6.2f°\n  Y: %05d  %6.2f°\n  Z: %05d  %6.2f°\n", xrot, xrotdeg, yrot, yrotdeg, zrot, zrotdeg)
+end
+
+function MyGame:displayAngleOptimization()
+  local yrot_setpoint = self.yRot:get()
+  local camyrot = self.camYRot:get()
+  local angleOffset = (yrot_setpoint + camyrot - 49152) % 65536
+  
+  local i = 1
+  
+  while angleOffset > angles[i].angle
+  do
+	i = i + 1
+  end
+  
+  return string.format("Angle Optimization\n  Desired Y Rotation: %05d\n  Optimal Stick Inputs:  X: %3d  Y: %3d\n", yrot_setpoint, angles[i].X, angles[i].Y)
 end
 
 function MyGame:displayAnalogPosition()
