@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="Tron-Dpad" author="Aliensqueakytoy" type="gamecube">
+
+	<background name="Basic" image="Background.png" />
+
+    <button name="a" image="A.png" x="270" y="55" width="43" height="43" />
+    <button name="b" image="b-button.png" x="235" y="79" width="25" height="25" />
+    <button name="x" image="X.png" x="321" y="48" width="25" height="47" />
+    <button name="y" image="Y.png" x="262" y="22" width="48" height="27" />
+    <button name="z" image="Z.png" x="301" y="8" width="41" height="20" />
+    <button name="start" image="Start.png" x="212" y="13" width="20" height="20" />
+
+    <button name="r" image="R.png" x="95" y="7" width="83" height="12" />
+    <analog name="trig_r" image="R.png" x="95" y="7" width="83" height="12"
+            direction="left" reverse="false" />
+
+    <button name="l" image="R.png" x="6" y="7" width="83" height="12" />
+    <analog name="trig_l" image="R.png" x="6" y="7" width="83" height="12"
+            direction="right" reverse="false" />
+
+    <button name="up" image="D-down-up.png" x="196" y="52" width="14" height="17" />
+    <button name="down" image="D-down-up.png" x="196" y="82" width="14" height="17" />
+    <button name="left" image="D-left-right.png" x="180" y="68" width="17" height="14" />
+    <button name="right" image="D-left-right.png" x="209" y="68" width="17" height="14" />
+
+    <stick xname="lstick_x" yname="lstick_y" image="Stick.png"
+           x="23" y="41" width="51" height="51" xrange="25" yrange="25"/>
+
+    <stick xname="cstick_x" yname="cstick_y" image="cstick.png"
+           x="122" y="50" width="33" height="33" xrange="20" yrange="20"/>
+
+</skin>
