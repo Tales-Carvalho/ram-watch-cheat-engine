@@ -22,6 +22,35 @@ function MyGame:init(options)
   self.startAddress = self:getGameStartAddress()
 end
 
+local sonicPrevAction = 0
+local knucklesPrevAction = 0
+
+local sonicKickCount = 0
+local knucklesDiveCount = 0
+
+local RTATimes = {
+  [2] = "2:30.06", -- Seaside Hill
+  [3] = "1:58.59", -- Ocean Palace
+  [16] = "0:15.18", -- Egg Hawk
+  [4] = "2:16.03", -- Grand Metropolis
+  [5] = "4:18.79", -- Power Plant
+  [17] = "0:06.39", -- Team Rose
+  [6] = "0:37.53", -- Casino Park
+  [7] = "1:51.04", -- Bingo Highway
+  [18] = "1:20.00", -- Robot Carnival
+  [8] = "1:43.79", -- Rail Canyon
+  [9] = "0:56.78", -- Bullet Station
+  [19] = "0:18.68", -- Egg Albatross
+  [10] = "0:57.89", -- Frog Forest
+  [11] = "2:38.73", -- Lost Jungle
+  [20] = "0:06.83", -- Team Dark
+  [12] = "1:25.88", -- Hang Castle
+  [13] = "2:25.91", -- Mystic Mansion
+  [21] = "1:53.76", -- Robot Storm
+  [14] = "4:02.29", -- Egg Fleet
+  [15] = "3:23.09", -- Final Fortress
+  [22] = "0:15.78" -- Egg Emperor
+}
 
 -- Pointers addresses update
 
@@ -30,6 +59,21 @@ function MyGame:updateAddresses()
   local pointerChar2 = self.startAddress + 0x2AD090 + readBytes(self.startAddress + 0x9D986A, 1, false) * 4
   local pointerChar3 = self.startAddress + 0x2AD0B0 + readBytes(self.startAddress + 0x9D986A, 1, false) * 4
   local pointerChar4 = self.startAddress + 0x2AD0D0 + readBytes(self.startAddress + 0x9D986A, 1, false) * 4
+
+  local sonicPointerChar1 = self.startAddress + 0x2AD070
+  local sonicPointerChar2 = self.startAddress + 0x2AD090
+  local sonicPointerChar3 = self.startAddress + 0x2AD0B0
+  local sonicPointerChar4 = self.startAddress + 0x2AD0D0
+
+  local tailsPointerChar1 = self.startAddress + 0x2AD074
+  local tailsPointerChar2 = self.startAddress + 0x2AD094
+  local tailsPointerChar3 = self.startAddress + 0x2AD0B4
+  local tailsPointerChar4 = self.startAddress + 0x2AD0D4
+
+  local knucklesPointerChar1 = self.startAddress + 0x2AD078
+  local knucklesPointerChar2 = self.startAddress + 0x2AD098
+  local knucklesPointerChar3 = self.startAddress + 0x2AD0B8
+  local knucklesPointerChar4 = self.startAddress + 0x2AD0D8
 
   if pointerChar1 == 0 then
 	self.pointerChar1Value = nil
@@ -53,6 +97,78 @@ function MyGame:updateAddresses()
 	self.pointerChar4Value = nil
   else
 	self.pointerChar4Value = self.startAddress + utils.readIntBE(pointerChar4) - 0x80000000
+  end
+
+  if sonicPointerChar1 == 0 then
+  self.sonicPointerChar1Value = nil
+  else
+  self.sonicPointerChar1Value = self.startAddress + utils.readIntBE(sonicPointerChar1) - 0x80000000
+  end
+  
+  if sonicPointerChar2 == 0 then
+  self.sonicPointerChar2Value = nil
+  else
+  self.sonicPointerChar2Value = self.startAddress + utils.readIntBE(sonicPointerChar2) - 0x80000000
+  end
+  
+  if sonicPointerChar3 == 0 then
+  self.sonicPointerChar3Value = nil
+  else
+  self.sonicPointerChar3Value = self.startAddress + utils.readIntBE(sonicPointerChar3) - 0x80000000
+  end
+  
+  if sonicPointerChar4 == 0 then
+  self.sonicPointerChar4Value = nil
+  else
+  self.sonicPointerChar4Value = self.startAddress + utils.readIntBE(sonicPointerChar4) - 0x80000000
+  end
+
+  if tailsPointerChar1 == 0 then
+  self.tailsPointerChar1Value = nil
+  else
+  self.tailsPointerChar1Value = self.startAddress + utils.readIntBE(tailsPointerChar1) - 0x80000000
+  end
+  
+  if tailsPointerChar2 == 0 then
+  self.tailsPointerChar2Value = nil
+  else
+  self.tailsPointerChar2Value = self.startAddress + utils.readIntBE(tailsPointerChar2) - 0x80000000
+  end
+  
+  if tailsPointerChar3 == 0 then
+  self.tailsPointerChar3Value = nil
+  else
+  self.tailsPointerChar3Value = self.startAddress + utils.readIntBE(tailsPointerChar3) - 0x80000000
+  end
+  
+  if tailsPointerChar4 == 0 then
+  self.tailsPointerChar4Value = nil
+  else
+  self.tailsPointerChar4Value = self.startAddress + utils.readIntBE(tailsPointerChar4) - 0x80000000
+  end
+
+  if knucklesPointerChar1 == 0 then
+  self.knucklesPointerChar1Value = nil
+  else
+  self.knucklesPointerChar1Value = self.startAddress + utils.readIntBE(knucklesPointerChar1) - 0x80000000
+  end
+  
+  if knucklesPointerChar2 == 0 then
+  self.knucklesPointerChar2Value = nil
+  else
+  self.knucklesPointerChar2Value = self.startAddress + utils.readIntBE(knucklesPointerChar2) - 0x80000000
+  end
+  
+  if knucklesPointerChar3 == 0 then
+  self.knucklesPointerChar3Value = nil
+  else
+  self.knucklesPointerChar3Value = self.startAddress + utils.readIntBE(knucklesPointerChar3) - 0x80000000
+  end
+  
+  if knucklesPointerChar4 == 0 then
+  self.knucklesPointerChar4Value = nil
+  else
+  self.knucklesPointerChar4Value = self.startAddress + utils.readIntBE(knucklesPointerChar4) - 0x80000000
   end
 end
 
@@ -101,10 +217,75 @@ function PointerBasedChar4Value:getAddress()
 end
 
 
+local PointerBasedSonicChar1Value = subclass(valuetypes.MemoryValue)
+function PointerBasedSonicChar1Value:getAddress()
+  return self.game.sonicPointerChar1Value + self.offset
+end
+
+local PointerBasedSonicChar2Value = subclass(valuetypes.MemoryValue)
+function PointerBasedSonicChar2Value:getAddress()
+  return self.game.sonicPointerChar2Value + self.offset
+end
+
+local PointerBasedSonicChar3Value = subclass(valuetypes.MemoryValue)
+function PointerBasedSonicChar3Value:getAddress()
+  return self.game.sonicPointerChar3Value + self.offset
+end
+
+local PointerBasedSonicChar4Value = subclass(valuetypes.MemoryValue)
+function PointerBasedSonicChar4Value:getAddress()
+  return self.game.sonicPointerChar4Value + self.offset
+end
+
+
+local PointerBasedTailsChar1Value = subclass(valuetypes.MemoryValue)
+function PointerBasedTailsChar1Value:getAddress()
+  return self.game.tailsPointerChar1Value + self.offset
+end
+
+local PointerBasedTailsChar2Value = subclass(valuetypes.MemoryValue)
+function PointerBasedTailsChar2Value:getAddress()
+  return self.game.tailsPointerChar2Value + self.offset
+end
+
+local PointerBasedTailsChar3Value = subclass(valuetypes.MemoryValue)
+function PointerBasedTailsChar3Value:getAddress()
+  return self.game.tailsPointerChar3Value + self.offset
+end
+
+local PointerBasedTailsChar4Value = subclass(valuetypes.MemoryValue)
+function PointerBasedTailsChar4Value:getAddress()
+  return self.game.tailsPointerChar4Value + self.offset
+end
+
+
+local PointerBasedKnucklesChar1Value = subclass(valuetypes.MemoryValue)
+function PointerBasedKnucklesChar1Value:getAddress()
+  return self.game.knucklesPointerChar1Value + self.offset
+end
+
+local PointerBasedKnucklesChar2Value = subclass(valuetypes.MemoryValue)
+function PointerBasedKnucklesChar2Value:getAddress()
+  return self.game.knucklesPointerChar2Value + self.offset
+end
+
+local PointerBasedKnucklesChar3Value = subclass(valuetypes.MemoryValue)
+function PointerBasedKnucklesChar3Value:getAddress()
+  return self.game.knucklesPointerChar3Value + self.offset
+end
+
+local PointerBasedKnucklesChar4Value = subclass(valuetypes.MemoryValue)
+function PointerBasedKnucklesChar4Value:getAddress()
+  return self.game.knucklesPointerChar4Value + self.offset
+end
+
+
 -- Game addresses
 
 GV.activeChar =
   MV("Active Character", 0x9D986A, StaticValue, ByteType)
+GV.stageId =
+  MV("Stage ID", 0x29C33E, StaticValue, ShortType)
 
 GV.fSpeed = MV(
   "FSpeed", 0x60, PointerBasedChar4Value, FloatType)
@@ -156,6 +337,52 @@ GV.status1 = MV(
   "StatusBitfield1", 0x6, PointerBasedChar2Value, BinaryType, {binarySize=8, binaryStartBit=7})
 GV.status2 = MV(
   "StatusBitfield2", 0x7, PointerBasedChar2Value, BinaryType, {binarySize=8, binaryStartBit=7})  
+
+
+GV.sonicFSpd = MV(
+  "FSpeed", 0x60, PointerBasedSonicChar4Value, FloatType)
+GV.sonicVSpd = MV(
+  "VSpeed", 0x64, PointerBasedSonicChar4Value, FloatType)
+GV.sonicYRot = MV(
+  "YRot", 0x12, PointerBasedSonicChar2Value, ShortType)
+GV.sonicXPos = MV(
+  "XPos", 0x18, PointerBasedSonicChar2Value, FloatType)
+GV.sonicYPos = MV(
+  "YPos", 0x1C, PointerBasedSonicChar2Value, FloatType)
+GV.sonicZPos = MV(
+  "ZPos", 0x20, PointerBasedSonicChar2Value, FloatType)
+GV.sonicAction = MV(
+  "ActionNumber", 0x1, PointerBasedSonicChar2Value, ByteType)
+
+GV.tailsFSpd = MV(
+  "FSpeed", 0x60, PointerBasedTailsChar4Value, FloatType)
+GV.tailsVSpd = MV(
+  "VSpeed", 0x64, PointerBasedTailsChar4Value, FloatType)
+GV.tailsYRot = MV(
+  "YRot", 0x12, PointerBasedTailsChar2Value, ShortType)
+GV.tailsXPos = MV(
+  "XPos", 0x18, PointerBasedTailsChar2Value, FloatType)
+GV.tailsYPos = MV(
+  "YPos", 0x1C, PointerBasedTailsChar2Value, FloatType)
+GV.tailsZPos = MV(
+  "ZPos", 0x20, PointerBasedTailsChar2Value, FloatType)
+GV.tailsAction = MV(
+  "ActionNumber", 0x1, PointerBasedTailsChar2Value, ByteType)
+
+GV.knucklesFSpd = MV(
+  "FSpeed", 0x60, PointerBasedKnucklesChar4Value, FloatType)
+GV.knucklesVSpd = MV(
+  "VSpeed", 0x64, PointerBasedKnucklesChar4Value, FloatType)
+GV.knucklesYRot = MV(
+  "YRot", 0x12, PointerBasedKnucklesChar2Value, ShortType)
+GV.knucklesXPos = MV(
+  "XPos", 0x18, PointerBasedKnucklesChar2Value, FloatType)
+GV.knucklesYPos = MV(
+  "YPos", 0x1C, PointerBasedKnucklesChar2Value, FloatType)
+GV.knucklesZPos = MV(
+  "ZPos", 0x20, PointerBasedKnucklesChar2Value, FloatType)
+GV.knucklesAction = MV(
+  "ActionNumber", 0x1, PointerBasedKnucklesChar2Value, ByteType)
   
   
 -- Inputs
@@ -192,7 +419,116 @@ GV.minutes =
  
  
 -- Screen display functions
-  
+
+function MyGame:displayFileTimer()
+  local frameCount = self.frameCounter:get()
+
+  local centi = math.floor((frameCount % 60) * 100 / 60)
+  local sec = math.floor(frameCount / 60) % 60
+  local min = math.floor(frameCount / 3600)
+
+  return string.format("%02d:%02d.%02d", min, sec, centi)
+end
+
+function MyGame:displaySonicValues()
+  if utils.readIntBE(self.startAddress + 0x2AD090) == 0 then
+    return {
+      FSpd = '',
+      VSpd = '',
+      YRot = '',
+      XPos = '',
+      YPos = '',
+      ZPos = '',
+      Action = ''
+    }
+  end
+  return {
+    FSpd = string.format("%6.3f", self.sonicFSpd:get()),
+    VSpd = string.format("%6.3f", self.sonicVSpd:get()),
+    YRot = string.format("%5.1fd", self.sonicYRot:get() * 360 / 65536),
+    XPos = string.format("%7.2f", self.sonicXPos:get()),
+    YPos = string.format("%7.2f", self.sonicYPos:get()),
+    ZPos = string.format("%7.2f", self.sonicZPos:get()),
+    Action = string.format("%2d", self.sonicAction:get())
+  }
+end
+
+function MyGame:displayTailsValues()
+  if utils.readIntBE(self.startAddress + 0x2AD090) == 0 then
+    return {
+      FSpd = '',
+      VSpd = '',
+      YRot = '',
+      XPos = '',
+      YPos = '',
+      ZPos = '',
+      Action = ''
+    }
+  end
+  return {
+    FSpd = string.format("%6.3f", self.tailsFSpd:get()),
+    VSpd = string.format("%6.3f", self.tailsVSpd:get()),
+    YRot = string.format("%5.1fd", self.tailsYRot:get() * 360 / 65536),
+    XPos = string.format("%7.2f", self.tailsXPos:get()),
+    YPos = string.format("%7.2f", self.tailsYPos:get()),
+    ZPos = string.format("%7.2f", self.tailsZPos:get()),
+    Action = string.format("%2d", self.tailsAction:get())
+  }
+end
+
+function MyGame:displayKnucklesValues()
+  if utils.readIntBE(self.startAddress + 0x2AD090) == 0 then
+    return {
+      FSpd = '',
+      VSpd = '',
+      YRot = '',
+      XPos = '',
+      YPos = '',
+      ZPos = '',
+      Action = ''
+    }
+  end
+  return {
+    FSpd = string.format("%6.3f", self.knucklesFSpd:get()),
+    VSpd = string.format("%6.3f", self.knucklesVSpd:get()),
+    YRot = string.format("%5.1fd", self.knucklesYRot:get() * 360 / 65536),
+    XPos = string.format("%7.2f", self.knucklesXPos:get()),
+    YPos = string.format("%7.2f", self.knucklesYPos:get()),
+    ZPos = string.format("%7.2f", self.knucklesZPos:get()),
+    Action = string.format("%2d", self.knucklesAction:get())
+  }
+end
+
+function MyGame:displayRTATime()
+  if utils.readIntBE(self.startAddress + 0x2AD090) == 0 then
+    return ''
+  end
+  local stgId = self.stageId:get()
+  return RTATimes[stgId]
+  --return string.format("%4d", stgId)
+end
+
+function MyGame:displayKickCounter()
+  if utils.readIntBE(self.startAddress + 0x2AD090) == 0 then
+    return ''
+  end
+  local action = self.sonicAction:get()
+  if action ~= sonicPrevAction and action == 84 then
+    sonicKickCount = sonicKickCount + 1
+  end
+  sonicPrevAction = action
+  return string.format("%4d", sonicKickCount)
+end
+
+function MyGame:diveCounter()
+  local action = self.knucklesAction:get()
+  if action ~= knucklesPrevAction and action == 67 then
+    knucklesDiveCount = knucklesDiveCount + 1
+  end
+  knucklesPrevAction = action
+  return knucklesDiveCount
+end
+
 function MyGame:displaySpeed()
   if utils.readIntBE(self.startAddress + 0x2AD090) == 0 then
 	return string.format("")

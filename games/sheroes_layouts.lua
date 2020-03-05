@@ -6,12 +6,169 @@ package.loaded.layouts = nil
 local layoutsModule = require 'layouts'
 local Layout = layoutsModule.Layout
 
+--package.loaded.inputdisplay = nil
+local inputDisplayModule = require 'inputdisplay'
+local InputDisplay = inputDisplayModule.InputDisplay
+
+local imageValueDisplayModule = require 'imagevaluedisplay'
+local ImageValueDisplay = imageValueDisplayModule.ImageValueDisplay
+
+local background = require 'background'
+local HeroesBackground = background.HeroesBackground
+
 local layouts = {}
 
 local fixedWidthFontName = "Consolas"
 
 local inputColor = 0x880000
 local notPressed = 0xaaaaaa
+
+layouts.improved_viewer = subclass(Layout)
+function layouts.improved_viewer:init()
+  
+  local game = self.game
+
+  --self.margin = 12
+  --self:setUpdatesPerSecond(60)
+  --self:activateAutoPositioningY()
+  
+  self:setBreakpointUpdateMethod()
+
+  self.window:setSize(960, 2160)
+  self.labelDefaults = {fontSize=22, fontName=fixedWidthFontName}
+  --self.itemDisplayDefaults = {narrow=true}
+
+  self:addImage(HeroesBackground, {"heroes_background", self.game.activeChar}, {x=0, y=0})
+
+  self:addImage(ImageValueDisplay, {
+    function(...) return self.game:displayFileTimer() end,
+    8, 'Kimberley60pt'
+  }, {x=604,y=86})
+
+
+  self:addImage(ImageValueDisplay, {
+    function(...) return self.game:displaySonicValues().FSpd end,
+    6, 'Kimberley60pt'
+  }, {x=248,y=320})
+
+  self:addImage(ImageValueDisplay, {
+    function(...) return self.game:displaySonicValues().VSpd end,
+    6, 'Kimberley60pt'
+  }, {x=248,y=392})
+
+  self:addImage(ImageValueDisplay, {
+    function(...) return self.game:displaySonicValues().YRot end,
+    6, 'Kimberley60pt'
+  }, {x=248,y=550})
+
+  self:addImage(ImageValueDisplay, {
+    function(...) return self.game:displaySonicValues().XPos end,
+    8, 'Kimberley60pt'
+  }, {x=628,y=319})
+
+  self:addImage(ImageValueDisplay, {
+    function(...) return self.game:displaySonicValues().YPos end,
+    8, 'Kimberley60pt'
+  }, {x=628,y=391})
+
+  self:addImage(ImageValueDisplay, {
+    function(...) return self.game:displaySonicValues().ZPos end,
+    8, 'Kimberley60pt'
+  }, {x=628,y=463})
+
+  self:addImage(ImageValueDisplay, {
+    function(...) return self.game:displaySonicValues().Action end,
+    2, 'Kimberley60pt'
+  }, {x=788,y=550})
+
+
+  self:addImage(ImageValueDisplay, {
+    function(...) return self.game:displayTailsValues().FSpd end,
+    6, 'Kimberley60pt'
+  }, {x=248,y=770})
+
+  self:addImage(ImageValueDisplay, {
+    function(...) return self.game:displayTailsValues().VSpd end,
+    6, 'Kimberley60pt'
+  }, {x=248,y=842})
+
+  self:addImage(ImageValueDisplay, {
+    function(...) return self.game:displayTailsValues().YRot end,
+    6, 'Kimberley60pt'
+  }, {x=248,y=1000})
+
+  self:addImage(ImageValueDisplay, {
+    function(...) return self.game:displayTailsValues().XPos end,
+    8, 'Kimberley60pt'
+  }, {x=628,y=769})
+
+  self:addImage(ImageValueDisplay, {
+    function(...) return self.game:displayTailsValues().YPos end,
+    8, 'Kimberley60pt'
+  }, {x=628,y=841})
+
+  self:addImage(ImageValueDisplay, {
+    function(...) return self.game:displayTailsValues().ZPos end,
+    8, 'Kimberley60pt'
+  }, {x=628,y=913})
+
+  self:addImage(ImageValueDisplay, {
+    function(...) return self.game:displayTailsValues().Action end,
+    2, 'Kimberley60pt'
+  }, {x=788,y=1000})
+
+
+  self:addImage(ImageValueDisplay, {
+    function(...) return self.game:displayKnucklesValues().FSpd end,
+    6, 'Kimberley60pt'
+  }, {x=248,y=1220})
+
+  self:addImage(ImageValueDisplay, {
+    function(...) return self.game:displayKnucklesValues().VSpd end,
+    6, 'Kimberley60pt'
+  }, {x=248,y=1292})
+
+  self:addImage(ImageValueDisplay, {
+    function(...) return self.game:displayKnucklesValues().YRot end,
+    6, 'Kimberley60pt'
+  }, {x=248,y=1450})
+
+  self:addImage(ImageValueDisplay, {
+    function(...) return self.game:displayKnucklesValues().XPos end,
+    8, 'Kimberley60pt'
+  }, {x=628,y=1219})
+
+  self:addImage(ImageValueDisplay, {
+    function(...) return self.game:displayKnucklesValues().YPos end,
+    8, 'Kimberley60pt'
+  }, {x=628,y=1291})
+
+  self:addImage(ImageValueDisplay, {
+    function(...) return self.game:displayKnucklesValues().ZPos end,
+    8, 'Kimberley60pt'
+  }, {x=628,y=1363})
+
+  self:addImage(ImageValueDisplay, {
+    function(...) return self.game:displayKnucklesValues().Action end,
+    2, 'Kimberley60pt'
+  }, {x=788,y=1450})
+
+
+  self:addImage(ImageValueDisplay, {
+    function(...) return self.game:displayKickCounter() end,
+    4, 'Kimberley60pt'
+  }, {x=571,y=1607})
+
+  self:addImage(ImageValueDisplay, {
+    function(...) return self.game:displayRTATime() end,
+    7, 'Kimberley60pt'
+  }, {x=603,y=1723})
+
+  --self:addImage(ImageValueDisplay, {function(...) return string.format("%d", self.game.activeChar:get()) end, 9, 'Kimberley60pt'}, {x=100,y=100})
+
+  self:addImage(InputDisplay, {"TronStyleNoDpadUpscaled", self.game.ABXYS, self.game.DZ, self.game.stickX, self.game.stickY, self.game.xCStick, self.game.yCStick, self.game.lShoulder, self.game.rShoulder}, {x=0, y=1832})
+  
+end
 
 layouts.normal = subclass(Layout)
 function layouts.normal:init()
