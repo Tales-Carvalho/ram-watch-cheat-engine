@@ -1,86 +1,39 @@
 # ram-watch-cheat-engine
 
-<img src="screenshot.png" width="800" />
+The original description of the repository, as well as a tutorial to guide through how it is used, is available on the [original repository](https://github.com/yoshifan/ram-watch-cheat-engine).
 
-Sample videos:
+## Features added in this fork
 
-- [Super Mario Galaxy - Tilt research](https://www.youtube.com/watch?v=AEkigdJddw8)
-- [Sonic Adventure 2: Battle - Inputs and coordinates, by Tales](https://www.youtube.com/watch?v=Cp1txiez0OM)
-- [F-Zero GX - Replay inputs and status, customized by superSANIC](https://www.youtube.com/watch?v=ntQt6srYo6A)
+### 3D Sonic games specific layouts
 
+There are layouts available for Sonic Adventure DX, Sonic Adventure 2: Battle and Sonic Heroes. Here are the parameters needed to use them:
 
-## Overview
+| Game                      | gameModuleName | gameVersion | layoutName            | Layout Description                                                                                 |
+|---------------------------|----------------|-------------|-----------------------|----------------------------------------------------------------------------------------------------|
+| Sonic Adventure DX        | sadx           | na          | improved_viewer_2160p | Layout for 4K videos with relevant variables in Kimberley font and with input viewer in Tron Style |
+| Sonic Adventure DX        | sadx           | na          | improved_viewer_720p  | Same as above, downscaled to 720p                                                                  |
+| Sonic Adventure DX        | sadx           | na          | normal                | Simple layout with important variables for TASing or glitch hunting                                |
+| Sonic Adventure DX        | sadx           | na          | youtube               | Simple compacted layout with important variables for visualization                                 |
+| Sonic Adventure 2: Battle | sa2b           | na          | improved_viewer_2160p | Layout for 4K videos with relevant variables in Kimberley font and with input viewer in Tron Style |
+| Sonic Adventure 2: Battle | sa2b           | na          | improved_viewer_720p  | Same as above, downscaled to 720p                                                                  |
+| Sonic Adventure 2: Battle | sa2b           | na          | normal                | Simple layout with important variables for TASing or glitch hunting                                |
+| Sonic Adventure 2: Battle | sa2b           | na          | youtube               | Simple compacted layout with important variables for visualization                                 |
+| Sonic Heroes              | sheroes        | na          | improved_viewer_2160p | Layout for 4K videos with relevant variables in Kimberley font and with input viewer in Tron Style |
+| Sonic Heroes              | sheroes        | na          | normal                | Simple layout with important variables for TASing or glitch hunting                                |
+| Sonic Heroes              | sheroes        | na          | youtube               | Simple compacted layout with important variables for visualization                                 |
 
-RAM watch is a powerful tool for researching games - for modding, speedrunning, writing cheat codes, or just generally learning how the game works.
+Other layouts have been implemented as testing purposes and were left in the source code. Feel free to use and tweak them.
 
-The [tool-assisted speedrun community](http://tasvideos.org/) makes extensive use of RAM watch on emulated games. The most popular Gamecube/Wii emulator is Dolphin, and so far, Cheat Engine has been the most popular RAM watch solution for Dolphin. Here's a nice [tutorial by aldelaro](http://tasvideos.org/forum/viewtopic.php?t=17735) on using Cheat Engine with Dolphin.
+### Image based input viewer
 
-In addition to supporting RAM viewing, searching, and editing, Cheat Engine also includes a Lua scripting engine. This opens up many more possibilities for boosting research productivity, including:
+The InputDisplay class has been created in `inputviewer.lua` as a tool that works similarly to [NintendoSpy](https://github.com/jaburns/NintendoSpy). Three input skins (OnVarTheme, TronStyleNoDpad720p and TronStyleNoDpad2160p) were created under the `inputs_skin` folder. To use this class, call the `addImage` method in the declaration of the `init` method of your layout and pass the controller variables as parameters: `Layout:addImage(InputDisplay, {'InputSkinName', ControllerData1_Variable, ControllerData2_Variable}, {x=XPos, y=YPos}`, where ControllerData1_Variable contains the controller data for button presses and the main stick, and ControllerData2_Variable contains the controller data for the C stick and the analog triggers. Refer to `games/sa2b_layouts.lua:75` for an example.
 
-- More interactivity. With Lua scripting, you can create a separate Cheat Engine window with arbitrary GUI elements: buttons, text fields, and so on. You can record values to a .txt file as the game runs, and then paste results into a spreadsheet to make a graph (e.g. showing your character's speed over time).
+To create your own input skin, create a folder in `inputs_skin` with the desired input skin name. In the new folder, create the file `skin.lua`, which describes parameters like the position and sizes of all the images used in the skin. Refer to `inputs_skin/TronStyleNoDpad2160p/skin.lua` for an example.
 
-- More flexible RAM viewing compared to Cheat Engine's address list display. For example, you can set your font and font size, limit the number of decimal places in a float, and make the display update as often as once per frame.
+### Image based fonts
 
-- It's easier to build upon previous results. Instead of entering the same pointer base for 10 different address list entries, you can save that pointer to a Lua variable and re-use that variable. You can run RAM values through formulas like sqrt(x^2 + y^2) and display the result.
+The ImageValueDisplay class has been created in `imagevaluedisplay.lua` as a tool to display text using image based fonts. Fonts are declared in the `fonts` folder and described in the `font.lua` file. Similarly to InputDisplay, this template can be used to declare new fonts. To use this class, call the `addImage` method in the declaration of the `init` method of your layout and pass the desired variable and its size as parameters: `Layout:addImage(ImageValueDisplay, {Variable, VariableSizeInBytes, 'FontName'}, {x=XPos, y=YPos})`. Refer to `games/sa2b_layouts.lua:65` for an example.
 
-This repository contains:
+### Background images
 
-- Ready-to-use RAM display layouts for several games.
-
-- A Lua code framework for writing custom RAM displays with the features described above.
-
-- A tutorial to help you get started.
-
-
-## Game compatibility
-
-The main focus of the framework is on games running in Dolphin emulator. Most disc-based Gamecube and Wii games will work in this framework. Any games included in this repository's `games` folder are confirmed to work.
-
-The start-address calculation used in this framework doesn't work for every Dolphin game. In particular, many Virtual Console and WiiWare games will not work, and there may be a few disc-based Gamecube/Wii games using advanced memory features which won't work here. We need to resolve [issue #4](https://github.com/yoshifan/ram-watch-cheat-engine/issues/4) to support these games.
-
-The framework can also be used for PC games and other emulators. If the start address changes in those games, though, then you'll have to figure out the address calculation yourself.
-
-
-## Requirements
-
-Windows, Mac, or Linux. Cheat Engine and Dolphin are supported on all of these platforms, though Windows is probably easiest for Cheat Engine. Also, the tutorial here assumes Windows, but the explanations shouldn't change that much between platforms.
-
-No programming or Lua experience is required for the first few tutorial sections. For the later sections on writing your own displays and game scripts, some programming experience will make it easier, but the tutorial attempts to walk through things slowly for beginners.
-
-
-## Getting started
-
-Go through the [Tutorial](/docs/tutorial/index.md) until you've got enough knowledge to do your game research.
-
-Here's the first tutorial section: [Get a RAM watch script up and running](/docs/tutorial/run.md).
-
-As a general recommendation, it's okay to skip doing a tutorial section if it doesn't really apply to you, but reading the sections you skip is probably still a good idea.
-
-
-## Support
-
-If you're having problems before even touching the Lua code, you might want to read [aldelaro's tutorial](http://tasvideos.org/forum/viewtopic.php?t=17735) on using Cheat Engine with Dolphin.
-
-If you're getting Lua errors or the Lua script isn't doing what you expect, try the [troubleshooting and debugging page](/docs/debugging.md).
-
-If you've got a question, problem, error message, etc. that you want to ask about, try [this TASvideos forum thread](http://tasvideos.org/forum/viewtopic.php?t=18685). Note: In the Lua Engine window, the latest Lua error appears BELOW previous errors.
-
-If you've got more of a suggestion or request, or you think you've found a bug, it might fit better in the GitHub issues section. In general, though, feel free to post at either GitHub or TASvideos.
-
-I encourage asking questions publicly with the methods above so others can learn too, but messaging me ([yoshifan](https://github.com/yoshifan)) directly is fine too. Feel free to contact me on Twitter or Discord, send a TASvideos PM, or whatever is convenient.
-
-
-## Disclaimer
-
-Cheat Engine is a powerful tool, so don't be too careless when using it. For example, if you ever attempt to edit memory (such as when using the F-Zero GX stat-editing layouts), make extra sure that you've selected the Dolphin.exe process in Cheat Engine, and not some other process on your computer.
-
-The primary authors of this GitHub repository are not affiliated with Dolphin, Cheat Engine, or the companies behind the games mentioned here.
-
-
-## Credits
-
-Masterjun, for writing the Dolphin + Cheat Engine RAM watch script that this project was based on: http://tasvideos.org/forum/viewtopic.php?t=14379 (2013.08.26)
-
-Tales, for providing the Sonic Adventure DX and Sonic Adventure 2: Battle scripts that were added to this repository (with slight modifications).
-
-aldelaro, for the Dolphin + Cheat Engine tutorial I've linked a few times in these docs.
+While static backgrounds could be added using the SimpleElement class, this approach does not allow dynamic changes on it. The `background.lua` file was created to solve this problem, with the classes StaticBackground, SADXBackground, SA2Background and HeroesBackground. The last three ones were implemented to interact specifically with the 3D Sonic games, changing its image file on character selection, although their templates can be used to create other specific background classes.

@@ -170,7 +170,17 @@ GV.status1 = MV(
 GV.status2 = MV(
   "StatusBitfield2", 0x5, PointerBasedChar2Value, BinaryType, {binarySize=8, binaryStartBit=7})
 
-  
+GV.hoverLimit = MV(
+  "HoverLimit", 0xC0, PointerBasedChar4Value, IntType)
+
+GV.rngState = MV(
+  "RNG State", 0x3AD6A0, StaticValue, IntType)
+
+GV.analogAngle = MV(
+  "AnalogAngle", 0x1E53BA, StaticValue, ShortType)
+GV.analogMagnitude = MV(
+  "AnalogMagnitude", 0x1E53BC, StaticValue, FloatType)
+
 GV.character = MV(
   "CharacterID", 0x3, PointerBasedChar4Value, ByteType)
 
@@ -195,6 +205,9 @@ GV.camYRot = MV("Camera YRot", 0x1FF5CA, StaticValue, ShortType)
 GV.camZRot = MV("Camera ZRot", 0x1FF5CE, StaticValue, ShortType)
   
 -- Inputs
+
+GV.controllerData1 = MV("ControllerData1", 0x2BAB78, StaticValue, IntType)
+GV.controllerData2 = MV("ControllerData2", 0x2BAB7C, StaticValue, IntType)
 
 GV.ABXYS = MV("ABXY & Start", 0x2BAB78,
   StaticValue, BinaryType, {binarySize=8, binaryStartBit=7})
@@ -228,6 +241,98 @@ GV.minutes =
  
  
 -- Screen display functions
+
+function MyGame:displayValues()
+
+  if utils.readIntBE(self.startAddress + 0x1e7788) == 0 then
+    return {
+      ['Time'] = '',
+      ['FSpd'] = '',
+      ['VSpd'] = '',
+      ['StSpd'] = '',
+      ['XSpd'] = '',
+      ['YSpd'] = '',
+      ['ZSpd'] = '',
+      ['XPos'] = '',
+      ['YPos'] = '',
+      ['ZPos'] = '',
+      ['XRot'] = '',
+      ['YRot'] = '',
+      ['ZRot'] = '',
+      ['Hover'] = '',
+      ['Action'] = '',
+      ['RNG'] = '',
+      ['Flight'] = '',
+      ['AnalogAngle'] = '',
+      ['AnalogMagnitude'] = ''
+    }
+  end
+
+  local frames = self.frameCounter:get()
+  local centi = self.centiseconds:get()
+  local sec = self.seconds:get()
+  local minu = self.minutes:get()
+
+  local stspd = ''
+  local rng = ''
+
+  if self.character:get() == 0 or self.character:get() == 1 or self.character:get() == 8 or self.character:get() == 12 then
+    stspd = string.format("%7.4f", self.stSpeed:get())
+  end
+
+  if self.character:get() == 4 or self.character:get() == 5 or self.character:get() == 15 or self.character:get() == 16 then
+    rng = string.format("0x%08X", self.rngState:get())
+  end
+
+  local hover = self.hover:get()
+
+  if hover > self.hoverLimit:get() then
+    hover = self.hoverLimit:get()
+  end
+
+  return {
+    ['Time'] = string.format("%02d:%02d:%02d - %05d", minu, sec, centi, frames),
+    ['FSpd'] = string.format("%7.4f", self.fSpeed:get()),
+    ['VSpd'] = string.format("%7.4f", self.vSpeed:get()),
+    ['XSpd'] = string.format("%7.4f", self.xSpd:get()),
+    ['YSpd'] = string.format("%7.4f", self.ySpd:get()),
+    ['ZSpd'] = string.format("%7.4f", self.zSpd:get()),
+    ['XPos'] = string.format("%11.4f", self.xPos:get()),
+    ['YPos'] = string.format("%11.4f", self.yPos:get()),
+    ['ZPos'] = string.format("%11.4f", self.zPos:get()),
+    ['XRot'] = string.format("%5.1fd", self.xRot:get() * 360 / 65536),
+    ['YRot'] = string.format("%5.1fd", self.yRot:get() * 360 / 65536),
+    ['ZRot'] = string.format("%5.1fd", self.zRot:get() * 360 / 65536),
+    ['Hover'] = string.format("%2d/%2d", hover, self.hoverLimit:get()),
+    ['Action'] = string.format("%2d", self.action:get()),
+    ['StSpd'] = stspd,
+    ['RNG'] = rng,
+    ['Flight'] = '',
+    ['AnalogAngle'] = string.format("%5.1fd", self.analogAngle:get()),
+    ['AnalogMagnitude'] = string.format("%6.4f", self.analogMagnitude:get())
+  }
+
+end
+
+local prevCameraYRot = 0
+local currCameraYRot = 0
+
+function MyGame:displayAnalogAngle()
+
+  prevCameraYRot = currCameraYRot
+  currCameraYRot = self.camYRot:get()
+
+  local anaAngle
+
+  if self.analogMagnitude:get() == 0 then
+    anaAngle = 0
+  else
+    anaAngle = ((self.analogAngle:get() + prevCameraYRot) % 65536) * 360 / 65536
+  end
+
+  return string.format("%5.1fd", anaAngle)
+
+end
   
 function MyGame:displaySpeed()
   if utils.readIntBE(self.startAddress + 0x1e7788) == 0 then
@@ -314,11 +419,11 @@ function MyGame:displayPosition()
   local ypos = self.yPos:get()
   local zpos = self.zPos:get()
   
-  local xpush = self.xPush:get()
-  local ypush = self.yPush:get()
-  local zpush = self.zPush:get()
+  local xtilt = self.xTilt:get()
+  local ytilt = self.yTilt:get()
+  local ztilt = self.zTilt:get()
   
-  return string.format("Position              External Push\n  X: %10.4f         X: %9.4f\n  Y: %10.4f         Y: %9.4f\n  Z: %10.4f         Z: %9.4f\n", xpos, xpush, ypos, ypush, zpos, zpush)
+  return string.format("Position              Surface Tilt\n  X: %10.4f         X: %9.4f\n  Y: %10.4f         Y: %9.4f\n  Z: %10.4f         Z: %9.4f\n", xpos, xtilt, ypos, ytilt, zpos, ztilt)
 end
 
 function MyGame:displayPositionSmall()
@@ -330,11 +435,11 @@ function MyGame:displayPositionSmall()
   local ypos = self.yPos:get()
   local zpos = self.zPos:get()
   
-  local xpush = self.xPush:get()
-  local ypush = self.yPush:get()
-  local zpush = self.zPush:get()
+  local xtilt = self.xTilt:get()
+  local ytilt = self.yTilt:get()
+  local ztilt = self.zTilt:get()
   
-  return string.format("Position       External Push\n  X: %8.2f   X: %8.2f\n  Y: %8.2f   Y: %8.2f\n  Z: %8.2f   Z: %8.2f\n", xpos, xpush, ypos, ypush, zpos, zpush)
+  return string.format("Position      Surface Tilt\n  X: %8.2f   X: %8.5f\n  Y: %8.2f   Y: %8.5f\n  Z: %8.2f   Z: %8.5f\n", xpos, xtilt, ypos, ytilt, zpos, ztilt)
 end
 
 function MyGame:displayTime()
@@ -517,6 +622,27 @@ function MyGame:displayAllButtons()
     s = s..self:buttonDisplay(button)
   end
   return s
+end
+  
+
+function MyGame:inputDisplay(x_pos, y_pos)
+	local abxys = self.ABXYS:get()
+	local dz = self.DZ:get()
+	local xstick = self.stickX:get()
+	local ystick = self.stickY:get()
+	local cxstick = self.xCStick:get()
+	local cystick = self.yCStick:get()
+	local lshoulder = self.lShoulder:get()
+	local rshoulder = self.rShoulder:get()
+	
+	local inputDirectory = RWCEMainDirectory .. '/inputs_skin'
+	
+	local bg_file = inputDirectory .. '/background.png'
+	
+	local bg = createPicture()
+	bg:loadFromFile(bg_file)
+	
+	
 end
   
   

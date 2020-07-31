@@ -43,8 +43,9 @@ function ImageValueDisplay:init(window, returnFuncOrValue, numCharacters, fontNa
   self.charImages[''] = createPicture()
   self.charImages[' '] = createPicture()
 
-  local width = 41
-  local height = 51
+  local width = font.settings.width
+  local height = font.settings.height
+  
   for n=1, numCharacters do
     local uiObj = createImage(window)
     uiObj:setSize(width, height)

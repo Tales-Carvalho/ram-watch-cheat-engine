@@ -12,9 +12,23 @@ local charImageFiles = {
 	['.'] = '/dot.png',
 	[':'] = '/colon.png',
 	['-'] = '/minus.png',
-	['d'] = '/deg.png'
+	['d'] = '/deg.png',
+	['A'] = '/A.png',
+	['B'] = '/B.png',
+	['C'] = '/C.png',
+	['D'] = '/D.png',
+	['E'] = '/E.png',
+	['F'] = '/F.png',
+	['x'] = '/x.png',
+	['/'] = '/slash.png'
+}
+
+local settings = {
+	width = 40,
+	height = 51
 }
 
 return {
-	charImageFiles = charImageFiles
+	charImageFiles = charImageFiles,
+	settings = settings
 }

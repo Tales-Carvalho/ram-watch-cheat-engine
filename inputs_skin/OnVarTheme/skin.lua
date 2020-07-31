@@ -24,8 +24,8 @@ local analogMarkers = {
 }
 
 local shoulders = {
-	{File = '/trigger_a.png', Pos = {443, 51}, Size = {20,160} },
-	{File = '/trigger_a.png', Pos = {472, 51}, Size = {20,160} }
+	{Color = 0x36cf73, Pos = {443, 51}, Size = {20,160}, Direction = 'up' },
+	{Color = 0x36cf73, Pos = {472, 51}, Size = {20,160}, Direction = 'up' }
 }
 
 return {

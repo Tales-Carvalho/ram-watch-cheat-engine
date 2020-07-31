@@ -6,7 +6,6 @@ package.loaded.layouts = nil
 local layoutsModule = require 'layouts'
 local Layout = layoutsModule.Layout
 
---package.loaded.inputdisplay = nil
 local inputDisplayModule = require 'inputdisplay'
 local InputDisplay = inputDisplayModule.InputDisplay
 
@@ -23,22 +22,17 @@ local fixedWidthFontName = "Consolas"
 local inputColor = 0x880000
 local notPressed = 0xaaaaaa
 
-layouts.improved_viewer = subclass(Layout)
-function layouts.improved_viewer:init()
+layouts.improved_viewer_2160p = subclass(Layout)
+function layouts.improved_viewer_2160p:init()
   
   local game = self.game
-
-  --self.margin = 12
-  --self:setUpdatesPerSecond(60)
-  --self:activateAutoPositioningY()
   
   self:setBreakpointUpdateMethod()
 
   self.window:setSize(960, 2160)
   self.labelDefaults = {fontSize=22, fontName=fixedWidthFontName}
-  --self.itemDisplayDefaults = {narrow=true}
 
-  self:addImage(HeroesBackground, {"heroes_background", self.game.activeChar}, {x=0, y=0})
+  self:addImage(HeroesBackground, {"heroes_background_2160p", self.game.activeChar}, {x=0, y=0})
 
   self:addImage(ImageValueDisplay, {
     function(...) return self.game:displayFileTimer() end,
@@ -164,9 +158,7 @@ function layouts.improved_viewer:init()
     7, 'Kimberley60pt'
   }, {x=603,y=1723})
 
-  --self:addImage(ImageValueDisplay, {function(...) return string.format("%d", self.game.activeChar:get()) end, 9, 'Kimberley60pt'}, {x=100,y=100})
-
-  self:addImage(InputDisplay, {"TronStyleNoDpadUpscaled", self.game.ABXYS, self.game.DZ, self.game.stickX, self.game.stickY, self.game.xCStick, self.game.yCStick, self.game.lShoulder, self.game.rShoulder}, {x=0, y=1832})
+  self:addImage(InputDisplay, {"TronStyleNoDpad2160p", self.game.ABXYS, self.game.DZ, self.game.stickX, self.game.stickY, self.game.xCStick, self.game.yCStick, self.game.lShoulder, self.game.rShoulder}, {x=0, y=1832})
   
 end
 
@@ -188,7 +180,6 @@ function layouts.normal:init()
   
   self.margin = 6
   self:setBreakpointUpdateMethod()
-  --self:activateAutoPositioningY()
   
   self.window:setSize(320, 720)
   self.labelDefaults = {fontSize=11, fontName=fixedWidthFontName}
@@ -262,7 +253,6 @@ function layouts.youtube:init()
   
   self.margin = 6
   self:setBreakpointUpdateMethod()
-  --self:activateAutoPositioningY()
   
   self.window:setSize(240, 540)
   self.labelDefaults = {fontSize=11, fontName=fixedWidthFontName}
@@ -282,14 +272,8 @@ function layouts.youtube:init()
   --Rotation
   self:addItem(function(...) return self.game:displayRotationSmall(...) end)
   
-  --Physics
-  --self:addItem(function(...) return self.game:displayPhysics(...) end)
-  
   --Misc
   self:addItem(function(...) return self.game:displayMiscSmall(...) end)
-  
-  --Status Bitfield
-  --self:addItem(function(...) return self.game:displayStatus(...) end)
   
   --Inputs
   for i, button in pairs(buttons) do
@@ -336,7 +320,6 @@ function layouts.angleTest:init()
   
   self.margin = 6
   self:setBreakpointUpdateMethod()
-  --self:activateAutoPositioningY()
   
   self.window:setSize(320, 720)
   self.labelDefaults = {fontSize=11, fontName=fixedWidthFontName}
