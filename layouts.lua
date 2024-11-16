@@ -30,6 +30,21 @@ function Layout:update()
     self:autoPositionElements()
     self.autoPositioningDone = true
   end
+
+  -- TODO: temp solution for dumping frames
+  if RenderOptions and RenderOptions.dumpFrames then
+    if RenderOptions.nirCmdDirectory == nil or string.len(RenderOptions.nirCmdDirectory) == 0 then
+      error("Please specify nirCmdDirectory path (ending with nircmd.exe)")
+    end
+    if RenderOptions.imgOutDirectory == nil or string.len(RenderOptions.imgOutDirectory) == 0 then
+      error("Please specify imgOutDirectory path to save screenshots to")
+    end
+
+    local imgOut = string.format("frame%015d.png", self.game:getFrameCount() - 1)
+    local imgOut = "\"" .. RenderOptions.imgOutDirectory .. "\\" .. imgOut .. "\""
+    local cmd = "\"" .. RenderOptions.nirCmdDirectory .. "\"" .. " savescreenshotfull " .. imgOut
+    os.execute("\"" .. cmd .. "\"")
+  end
 end
 
 
