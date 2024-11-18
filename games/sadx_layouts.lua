@@ -6,9 +6,6 @@ package.loaded.layouts = nil
 local layoutsModule = require 'layouts'
 local Layout = layoutsModule.Layout
 
-local camviewerModule = require 'cameraviewer'
-local CameraViewer = camviewerModule.CameraViewer
-
 local inputDisplayModule = require 'inputdisplay'
 local InputDisplay = inputDisplayModule.InputDisplay
 

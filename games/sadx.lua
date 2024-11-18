@@ -189,6 +189,9 @@ GV.cameraZRot = MV(
 
 -- Inputs
 
+GV.controllerData1 = MV("ControllerData1", 0xA6CE0, StaticValue, IntType)
+GV.controllerData2 = MV("ControllerData2", 0xA6CE4, StaticValue, IntType)
+
 GV.ABXYS = MV("ABXY & Start", 0xA6CE0,
   StaticValue, BinaryType, {binarySize=8, binaryStartBit=7})
 GV.DZ = MV("D-Pad & Z", 0xA6CE1,
