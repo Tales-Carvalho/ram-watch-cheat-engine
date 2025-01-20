@@ -130,6 +130,41 @@ function layouts.improved_viewer_720p:init()
   
 end
 
+layouts.yt_shorts_viewer = subclass(Layout)
+function layouts.yt_shorts_viewer:init()
+
+  self:setBreakpointUpdateMethod()
+
+  self.window:setColor(0xff77ff)
+  self.window:setSize(1080, 480)
+  self.labelDefaults = {fontSize=22, fontName=fixedWidthFontName}
+
+  self:addImage(
+    SA2Background,
+    {"sa_background_shorts", self.game.character},
+    {x=0, y=0, width=1080, height=480, noBgImage=true}
+  )
+
+  local variables = {
+    {Name = 'FSpd', Characters = 7, X = 223, Y = 378},
+    {Name = 'VSpd', Characters = 7, X = 645, Y = 378},
+  }
+
+  for i, variable in ipairs(variables) do
+    self:addImage(ImageValueDisplay, {
+      function(...) return self.game:displayValues()[variable.Name] end,
+      variable.Characters, 'Kimberley60pt'
+    }, {x=variable.X,y=variable.Y})
+  end
+
+  self:addImage(
+    InputDisplay,
+    {"TronStyleNoDpad2160p", self.game.controllerData1, self.game.controllerData2},
+    {x=60, y=40}
+  )
+  
+end
+
 layouts.normal = subclass(Layout)
 function layouts.normal:init()
   

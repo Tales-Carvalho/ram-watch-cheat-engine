@@ -84,33 +84,40 @@ function SA2Background:init(window, bgFolder, character, passedDisplayOptions)
 		utils.updateTable(self.displayOptions, passedDisplayOptions)
 	end
 
+	local width = self.displayOptions.width or 960
+	local height = self.displayOptions.height or 2160
+
+	self.noBgImage = self.displayOptions.noBgImage or false
+
 	local bgDirectory = RWCEMainDirectory .. '/' .. self.bgFolder
 
-	self.bgColors = {}
+	if not self.noBgImage then
+		self.bgColors = {}
 
-	self.bgColors['black'] = createPicture()
-	self.bgColors['black']:loadFromFile(bgDirectory .. '/black.png')
+		self.bgColors['black'] = createPicture()
+		self.bgColors['black']:loadFromFile(bgDirectory .. '/black.png')
 
-	self.bgColors['blue'] = createPicture()
-	self.bgColors['blue']:loadFromFile(bgDirectory .. '/blue.png')
+		self.bgColors['blue'] = createPicture()
+		self.bgColors['blue']:loadFromFile(bgDirectory .. '/blue.png')
 
-	self.bgColors['gray'] = createPicture()
-	self.bgColors['gray']:loadFromFile(bgDirectory .. '/gray.png')
+		self.bgColors['gray'] = createPicture()
+		self.bgColors['gray']:loadFromFile(bgDirectory .. '/gray.png')
 
-	self.bgColors['orange'] = createPicture()
-	self.bgColors['orange']:loadFromFile(bgDirectory .. '/orange.png')
+		self.bgColors['orange'] = createPicture()
+		self.bgColors['orange']:loadFromFile(bgDirectory .. '/orange.png')
 
-	self.bgColors['pink'] = createPicture()
-	self.bgColors['pink']:loadFromFile(bgDirectory .. '/pink.png')
+		self.bgColors['pink'] = createPicture()
+		self.bgColors['pink']:loadFromFile(bgDirectory .. '/pink.png')
 
-	self.bgColors['purple'] = createPicture()
-	self.bgColors['purple']:loadFromFile(bgDirectory .. '/purple.png')
+		self.bgColors['purple'] = createPicture()
+		self.bgColors['purple']:loadFromFile(bgDirectory .. '/purple.png')
 
-	self.bgColors['red'] = createPicture()
-	self.bgColors['red']:loadFromFile(bgDirectory .. '/red.png')
+		self.bgColors['red'] = createPicture()
+		self.bgColors['red']:loadFromFile(bgDirectory .. '/red.png')
 
-	self.bgColors['yellow'] = createPicture()
-	self.bgColors['yellow']:loadFromFile(bgDirectory .. '/yellow.png')
+		self.bgColors['yellow'] = createPicture()
+		self.bgColors['yellow']:loadFromFile(bgDirectory .. '/yellow.png')
+	end
 
 	self.bgTexts = {}
 
@@ -126,17 +133,19 @@ function SA2Background:init(window, bgFolder, character, passedDisplayOptions)
 	self.bgTexts['hunting'] = createPicture()
 	self.bgTexts['hunting']:loadFromFile(bgDirectory .. '/text_hunting.png')
 
-	local uiObjBack = createImage(window)
-	uiObjBack:setSize(960, 2160)
-	uiObjBack:setStretch(false)
+	if not self.noBgImage then
+		local uiObjBack = createImage(window)
+		uiObjBack:setStretch(false)
+		uiObjBack:setSize(width, height)
 
-	uiObjBack.setPicture(self.bgColors['black'])
+		uiObjBack.setPicture(self.bgColors['black'])
 
-	self:addElement({0,0}, uiObjBack)
+		self:addElement({0,0}, uiObjBack)
+	end
 
 	local uiObjText = createImage(window)
-	uiObjText:setSize(960, 2160)
 	uiObjText:setStretch(false)
+	uiObjText:setSize(width, height)
 
 	uiObjText.setPicture(self.bgTexts['other'])
 
@@ -145,13 +154,20 @@ function SA2Background:init(window, bgFolder, character, passedDisplayOptions)
 end
 
 function SA2Background:update()
-
-	if self.character:get() > #self.color_array then
-		self.elements[1].uiObj.setPicture(self.bgColors['black'])
-		self.elements[2].uiObj.setPicture(self.bgTexts['other'])
+	if self.noBgImage then
+		if self.character:get() > #self.color_array then
+			self.elements[1].uiObj.setPicture(self.bgTexts['other'])
+		else
+			self.elements[1].uiObj.setPicture(self.bgTexts[self.text_array[self.character:get() + 1]])
+		end
 	else
-		self.elements[1].uiObj.setPicture(self.bgColors[self.color_array[self.character:get() + 1]])
-		self.elements[2].uiObj.setPicture(self.bgTexts[self.text_array[self.character:get() + 1]])
+		if self.character:get() > #self.color_array then
+			self.elements[1].uiObj.setPicture(self.bgColors['black'])
+			self.elements[2].uiObj.setPicture(self.bgTexts['other'])
+		else
+			self.elements[1].uiObj.setPicture(self.bgColors[self.color_array[self.character:get() + 1]])
+			self.elements[2].uiObj.setPicture(self.bgTexts[self.text_array[self.character:get() + 1]])
+		end
 	end
 
 end
