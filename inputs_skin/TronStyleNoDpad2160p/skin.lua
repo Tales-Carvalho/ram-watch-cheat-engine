@@ -20,8 +20,8 @@ local analogMarkers = {
 }
 
 local shoulders = {
-	{Color = 0xffffff, Pos = {21, 22}, Size = {220,28} },
-	{Color = 0xffffff, Pos = {312, 22}, Size = {220,28} }
+	{Color = 0xffffff, Pos = {21, 22}, Size = {220,28}, Direction = 'right' },
+	{Color = 0xffffff, Pos = {312, 22}, Size = {220,28}, Direction = 'left' }
 }
 
 return {
