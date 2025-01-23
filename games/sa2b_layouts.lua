@@ -159,8 +159,8 @@ function layouts.yt_shorts_viewer:init()
 
   self:addImage(
     InputDisplay,
-    {"TronStyleNoDpad2160p", self.game.controllerData1, self.game.controllerData2},
-    {x=60, y=40}
+    {"TronStyleSA2B2160p", self.game.controllerData1, self.game.controllerData2},
+    {x=157, y=40}
   )
   
 end

@@ -141,8 +141,11 @@ function InputDisplay:update()
 	
 	analogPositions = {
 		{ self:getLeft() + mainXPos * self.analogMarkers[1].Range + self.analogMarkers[1].Pos[1], self:getTop() - mainYPos * self.analogMarkers[1].Range + self.analogMarkers[1].Pos[2] },
-		{ self:getLeft() + cXPos * self.analogMarkers[2].Range + self.analogMarkers[2].Pos[1], self:getTop() - cYPos * self.analogMarkers[2].Range + self.analogMarkers[2].Pos[2] }
+		-- { self:getLeft() + cXPos * self.analogMarkers[2].Range + self.analogMarkers[2].Pos[1], self:getTop() - cYPos * self.analogMarkers[2].Range + self.analogMarkers[2].Pos[2] }
 	}
+	if #self.analogMarkers == 2 then
+		analogPositions[2] = { self:getLeft() + cXPos * self.analogMarkers[2].Range + self.analogMarkers[2].Pos[1], self:getTop() - cYPos * self.analogMarkers[2].Range + self.analogMarkers[2].Pos[2] }
+	end
 	
 	for n, analogImage in pairs(self.analogImages) do
 		self.elements[#self.buttonImages+1+n].uiObj.setPicture(analogImage)
