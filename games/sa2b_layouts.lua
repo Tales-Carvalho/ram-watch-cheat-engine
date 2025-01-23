@@ -147,7 +147,7 @@ function layouts.yt_shorts_viewer:init()
 
   local variables = {
     {Name = 'FSpd', Characters = 7, X = 223, Y = 378},
-    {Name = 'VSpd', Characters = 7, X = 645, Y = 378},
+    {Name = 'VSpd', Characters = 7, X = 753, Y = 378},
   }
 
   for i, variable in ipairs(variables) do
