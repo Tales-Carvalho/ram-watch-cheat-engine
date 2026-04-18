@@ -64,7 +64,7 @@ function SA2Background:init(window, bgFolder, character, passedDisplayOptions)
 		'hunting',
 		'hunting',
 		'tails',
-		'tails',
+		'other',
 		'sonic',
 		'other',
 		'other',
