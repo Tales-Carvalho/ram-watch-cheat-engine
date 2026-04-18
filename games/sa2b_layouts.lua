@@ -81,7 +81,7 @@ function layouts.improved_viewer_1080p:init()
   
   local game = self.game
   
-  self:setUpdatesPerSecond(60)
+  self:setBreakpointUpdateMethod()
 
   self.window:setColor(0x000000)
   self.window:setSize(480, 1080)
