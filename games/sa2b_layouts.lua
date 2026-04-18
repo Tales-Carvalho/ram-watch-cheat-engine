@@ -76,6 +76,60 @@ function layouts.improved_viewer_2160p:init()
   
 end
 
+layouts.improved_viewer_1080p = subclass(Layout)
+function layouts.improved_viewer_1080p:init()
+  
+  local game = self.game
+  
+  self:setUpdatesPerSecond(60)
+
+  self.window:setColor(0x000000)
+  self.window:setSize(480, 1080)
+  self.labelDefaults = {fontSize=22, fontName=fixedWidthFontName}
+
+  self:addImage(SA2Background, {"sa_background_1080p", self.game.character}, {x=0, y=0})
+
+  local variables = {
+    {Name = 'Time', Characters = 16, X = 139, Y = 39},
+    {Name = 'FSpd', Characters = 7, X = 86, Y = 193},
+    {Name = 'VSpd', Characters = 7, X = 86, Y = 229},
+    {Name = 'XSpd', Characters = 7, X = 314, Y = 174},
+    {Name = 'YSpd', Characters = 7, X = 314, Y = 210},
+    {Name = 'ZSpd', Characters = 7, X = 314, Y = 246},
+    {Name = 'XPos', Characters = 11, X = 149, Y = 345},
+    {Name = 'YPos', Characters = 11, X = 149, Y = 381},
+    {Name = 'ZPos', Characters = 11, X = 149, Y = 417},
+    {Name = 'XRot', Characters = 6, X = 106, Y = 551},
+    {Name = 'YRot', Characters = 6, X = 334, Y = 569},
+    {Name = 'ZRot', Characters = 6, X = 106, Y = 587},
+    {Name = 'Hover', Characters = 5, X = 150, Y = 686},
+    {Name = 'Action', Characters = 2, X = 417, Y = 686},
+    {Name = 'StSpd', Characters = 7, X = 314, Y = 721},
+    {Name = 'RNG', Characters = 10, X = 254, Y = 721},
+    {Name = 'Flight', Characters = 7, X = 314, Y = 721}
+  }
+
+  for i, variable in ipairs(variables) do
+    self:addImage(ImageValueDisplay, {
+      function(...) return self.game:displayValues()[variable.Name] end,
+      variable.Characters, 'Kimberley30pt'
+    }, {x=variable.X,y=variable.Y})
+  end
+
+  self:addImage(ImageValueDisplay, {
+    function(...) return self.game:displayAnalogAngle() end,
+    6, 'Kimberley30pt'
+  }, {x=277,y=825})
+
+  self:addImage(ImageValueDisplay, {
+    function(...) return self.game:displayValues().AnalogMagnitude end,
+    6, 'Kimberley30pt'
+  }, {x=277,y=861})
+
+  self:addImage(InputDisplay, {"TronStyleNoDpad1080p", self.game.controllerData1, self.game.controllerData2}, {x=0, y=916})
+  
+end
+
 layouts.improved_viewer_720p = subclass(Layout)
 function layouts.improved_viewer_720p:init()
   
